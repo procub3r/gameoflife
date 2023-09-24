@@ -27,9 +27,30 @@ module top(
 
                     // run sim
                     always @(posedge clk) begin
-                        // for now, just flip every cell's state
-                        cells[i][j] = ~cells_bak[i][j];
-                        cells_bak[i][j] = cells[i][j];
+                        // count number of live neighbours
+                        reg[3:0] count = 4'b0;
+                        count = count + {3'b0, cells_bak[i - 1][j - 1]};
+                        count = count + {3'b0, cells_bak[i - 1][j - 0]};
+                        count = count + {3'b0, cells_bak[i - 1][j + 1]};
+                        count = count + {3'b0, cells_bak[i - 0][j - 1]};
+                        count = count + {3'b0, cells_bak[i - 0][j + 1]};
+                        count = count + {3'b0, cells_bak[i + 1][j - 1]};
+                        count = count + {3'b0, cells_bak[i + 1][j - 0]};
+                        count = count + {3'b0, cells_bak[i + 1][j + 1]};
+
+                        // apply rules of game of life
+                        if (cells_bak[i][j] == 1) begin
+                            if (count < 2 || count > 3) begin
+                                cells[i][j] = 0;
+                            end
+                        end else begin
+                            if (count == 3) begin
+                                cells[i][j] = 1;
+                            end
+                        end
+
+                        // copy current state into bak buffer
+                        cells_bak[i][j] <= cells[i][j];
                     end
                 end
             end
