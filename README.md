@@ -17,4 +17,9 @@ The simulation starts in the edit phase, where you can use the left and right mo
 
 At any point, you can press the space key again to pause the simulation and edit the states of all the cells as you wish. Hit space to continue playing the simulation.
 
+## Contributing
+Head on over to the issues tab to find issues you can help fix!
+
+Make sure to create any changes to the `hacknight` branch :D
+
 #### Sriprad Potukuchi
