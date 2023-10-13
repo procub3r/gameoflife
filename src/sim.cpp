@@ -21,8 +21,6 @@ int main(void) {
     SetTargetFPS(60);
 
 	Vector2 mousePoint = { 0.0f, 0.0f };
-
-
     top.clk = 0;
     top.overwrite = 0;
     size_t frame_count = 0;
@@ -146,7 +144,8 @@ int main(void) {
 
 		DrawText("The Game Of Life", 10, 540, 95, BLACK);
 		DrawRectangle(850, 550, 100, 80, RED);
-		DrawText("Play\nPause", 870, 570, 20, BLACK);
+		DrawText("Play", 870, 570, 20, BLACK);
+		DrawText("Pause", 870, 590, 20, BLACK);
         EndDrawing();
     }
 
