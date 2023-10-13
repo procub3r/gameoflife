@@ -20,6 +20,9 @@ int main(void) {
     InitWindow(width, height, "Conway's Game Of Life");
     SetTargetFPS(60);
 
+	Vector2 mousePoint = { 0.0f, 0.0f };
+
+
     top.clk = 0;
     top.overwrite = 0;
     size_t frame_count = 0;
@@ -30,6 +33,12 @@ int main(void) {
     // overwrite is set to 1 from here on.
     top.eval();
 
+	Rectangle btnBounds = {850, 550, 100, 80};
+	int btnState = 0;
+	bool btnAction = false;
+
+	Texture2D button = LoadTexture("button.png");
+
     while (!context.gotFinish() && !WindowShouldClose()) { BeginDrawing(); ClearBackground(WHITE);
 
         int mouse_x = GetMouseX();
@@ -37,12 +46,29 @@ int main(void) {
         if (mouse_x < 0 || mouse_x >= width) mouse_x = -1;
         if (mouse_y < 0 || mouse_y >= 540) mouse_y = -1;
 
+
+		btnAction = false;
+
+		mousePoint = GetMousePosition();
+
+
         if (state == SET) {
             // set simulation state using mouse.
             // left click to breathe life into a cell,
             // right click to drain its life force.
 
-            if (GetKeyPressed() == KEY_SPACE) {
+			if (CheckCollisionPointRec(mousePoint, btnBounds))
+			{
+				if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) 
+					btnState = 1;
+				else 
+					btnState = 0;
+
+				if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) 
+					btnAction = true;
+			}
+
+            if (GetKeyPressed() == KEY_SPACE || btnAction == true) {
                 top.overwrite = 1;
                 for (int i = 0; i < cells_y; i++) {
                     for (int j = 0; j < cells_x; j++) {
@@ -58,8 +84,7 @@ int main(void) {
                 int hover_x = mouse_x / cell_width;
                 int hover_y = mouse_y / cell_width;
                 if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
-                    cells_in[hover_y][hover_x] = 1;
-                } else if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) {
+                    cells_in[hover_y][hover_x] = 1; } else if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) {
                     cells_in[hover_y][hover_x] = 0;
                 } else {
                     DrawRectangle(hover_x * cell_width + 2, hover_y * cell_width + 2, cell_width - 4, cell_width - 4, LIGHTGRAY);
@@ -79,7 +104,18 @@ int main(void) {
             // run the simulation.
             // user will not be able to alter simulation state here.
 
-            if (GetKeyPressed() == KEY_SPACE) {
+			if (CheckCollisionPointRec(mousePoint, btnBounds))
+			{
+				if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) 
+					btnState = 1;
+				else 
+					btnState = 0;
+
+				if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) 
+					btnAction = true;
+			}
+
+            if (GetKeyPressed() == KEY_SPACE || btnAction == true) {
                 for (int i = 0; i < cells_y; i++) {
                     for (int j = 0; j < cells_x; j++) {
                         cells_in[i][j] = top.cells[i][j];
@@ -107,7 +143,10 @@ int main(void) {
         }
 
         frame_count++;
-		DrawText(" The Game Of Life", 27, 540, 95, BLACK);
+
+		DrawText("The Game Of Life", 10, 540, 95, BLACK);
+		DrawRectangle(850, 550, 100, 80, RED);
+		DrawText("Play\nPause", 870, 570, 20, BLACK);
         EndDrawing();
     }
 
