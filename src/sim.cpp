@@ -4,7 +4,7 @@
 #include "../bin/Vtop.h"
 
 const int width = 960;
-const int height = 540;
+const int height = 640;
 const int cells_x = 32;
 const int cells_y = cells_x / 16 * 9;
 const int cell_width = width / cells_x;
@@ -30,14 +30,12 @@ int main(void) {
     // overwrite is set to 1 from here on.
     top.eval();
 
-    while (!context.gotFinish() && !WindowShouldClose()) {
-        BeginDrawing();
-        ClearBackground(WHITE);
+    while (!context.gotFinish() && !WindowShouldClose()) { BeginDrawing(); ClearBackground(WHITE);
 
         int mouse_x = GetMouseX();
         int mouse_y = GetMouseY();
         if (mouse_x < 0 || mouse_x >= width) mouse_x = -1;
-        if (mouse_y < 0 || mouse_y >= height) mouse_y = -1;
+        if (mouse_y < 0 || mouse_y >= 540) mouse_y = -1;
 
         if (state == SET) {
             // set simulation state using mouse.
@@ -109,6 +107,7 @@ int main(void) {
         }
 
         frame_count++;
+		DrawText(" The Game Of Life", 27, 540, 95, BLACK);
         EndDrawing();
     }
 
